@@ -17,7 +17,8 @@
     "db:reset": "npm run db:migrate && npm run db:ingest",
     "test": "npm test -w geocoding-server && npm test -w geocoding-web",
     "db:verify": "npm run db:verify -w geocoding-server",
-    "test:integration": "npm run test:integration -w geocoding-server"
+    "test:integration": "npm run test:integration -w geocoding-server",
+    "test:e2e": "npm run test:e2e -w geocoding-web"
   },
   "devDependencies": {
     "concurrently": "^9.1.2"

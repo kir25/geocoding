@@ -12,3 +12,7 @@ data/*
 
 # TypeScript incremental build state
 *.tsbuildinfo
+
+# Playwright
+web/test-results/
+web/playwright-report/

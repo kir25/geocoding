@@ -130,3 +130,25 @@ jobs:
       # that ship. Runs against the fixture loaded above.
       - name: API integration tests
         run: npm run test:integration -w geocoding-server
+
+      # Browser against the real stack — React, the API and Postgres, nothing
+      # stubbed. Playwright starts both servers itself, so the build has to
+      # exist first. Catches what only appears once the pieces are wired
+      # together: a broken asset path, a proxy misconfiguration, a response the
+      # UI cannot read.
+      - name: Build for the browser run
+        run: npm run build
+
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Browser end-to-end tests
+        run: npm run test:e2e
+
+      - name: Upload traces on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-traces
+          path: web/test-results/
+          retention-days: 7
