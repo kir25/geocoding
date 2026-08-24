@@ -1,0 +1,21 @@
+services:
+  postgres:
+    image: postgis/postgis:16-3.4
+    container_name: geocoding-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: geocoding
+      POSTGRES_PASSWORD: geocoding
+      POSTGRES_DB: geocoding
+    ports:
+      - "5432:5432"
+    volumes:
+      - geocoding-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U geocoding -d geocoding"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  geocoding-data:
