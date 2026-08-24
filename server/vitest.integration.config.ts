@@ -8,7 +8,7 @@ export default defineConfig({
   // plugin is here.
   plugins: [swc.vite({ module: { type: 'es6' } })],
   test: {
-    include: ['test/**/*.integration.spec.ts'],
+    include: ['test/integration/**/*.spec.ts'],
     // Nest bootstraps a DI container and a pg pool per file; the default 5s is
     // tight on a cold CI runner.
     testTimeout: 30_000,

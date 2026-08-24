@@ -2,10 +2,10 @@ import { act, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { http, HttpResponse } from 'msw';
 import { describe, expect, it, vi } from 'vitest';
-import App from './App';
-import { lastRequest, requestLog } from './test/handlers';
-import { server } from './test/msw';
-import type { GeocodeResult } from './api/types';
+import App from '../../src/App';
+import { lastRequest, requestLog } from '../support/handlers';
+import { server } from '../support/msw';
+import type { GeocodeResult } from '../../src/api/types';
 
 /**
  * The real component tree over the real API client and real fetch, with MSW
@@ -17,7 +17,7 @@ import type { GeocodeResult } from './api/types';
  * and the map is not the integration under test. The stub exposes the same
  * props, so clicking its button is clicking the map.
  */
-vi.mock('./components/MapView', () => ({
+vi.mock('../../src/components/MapView', () => ({
   MapView: ({
     selected,
     onMapClick,

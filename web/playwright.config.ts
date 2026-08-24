@@ -14,7 +14,7 @@ const API_PORT = 3000;
 const WEB_PORT = 5173;
 
 export default defineConfig({
-  testDir: './e2e',
+  testDir: './test/e2e',
   // A failure here is a real regression, not flake to be retried away — but CI
   // runners are noisy enough that one retry saves re-running the whole job.
   retries: process.env.CI ? 1 : 0,
