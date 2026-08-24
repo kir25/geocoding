@@ -10,6 +10,34 @@ geocoding from a pair of coordinates.
 | Frontend | React 19 + Vite, Leaflet with OpenStreetMap tiles |
 | Data     | [GeoNames](https://download.geonames.org/export/zip/) US postal codes — 40,979 places |
 
+```mermaid
+flowchart LR
+    subgraph browser["Browser :5173"]
+        SB["SearchBox<br/>debounce + abort"]
+        MV["MapView<br/>Leaflet + OSM tiles"]
+        SB <-->|"selected location"| MV
+    end
+
+    subgraph api["geocoding-server :3000"]
+        C["Controller<br/>DTO validation"] --> S["Service<br/>input classification"]
+        S --> R["Repository<br/>raw SQL"]
+    end
+
+    subgraph db["PostgreSQL 16 + PostGIS"]
+        T[("locations<br/>40,979 rows")]
+        GI["GiST on location<br/>nearest neighbour"]
+        PI["btree text_pattern_ops<br/>prefix match"]
+        T --- GI
+        T --- PI
+    end
+
+    browser -->|"/api proxied by Vite"| api
+    R --> T
+
+    GN[("GeoNames<br/>US.zip")] -.->|"npm run db:ingest"| T
+```
+
+
 ## Running it
 
 Requires Node 20+ and Docker.
@@ -86,6 +114,44 @@ One search field handles every input shape, routed at the index built for it:
 Text after a comma that is not a real state code degrades to a plain city
 search rather than returning a 400 — the user is mid-typing.
 
+### How the two interactions connect
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor U as User
+    participant S as SearchBox
+    participant M as MapView
+    participant A as API
+
+    rect rgb(240, 246, 255)
+    note over U,A: Typing — the search drives the map
+    U->>S: types "bos"
+    Note over S: 250ms debounce,<br/>previous request aborted
+    S->>A: GET /autocomplete?q=bos
+    A-->>S: predictions, Boston first
+    U->>S: picks "Boston, MA, USA"
+    S->>A: GET /geocode?place_id=us-city-MA-Boston
+    A-->>S: coordinates + components
+    S->>M: selected
+    Note over M: flyTo, marker drops
+    end
+
+    rect rgb(245, 245, 245)
+    note over U,A: Clicking — the map drives the search
+    U->>M: clicks a point
+    M->>A: GET /reverse?lat=&lng=
+    A-->>M: nearest location + distance_meters
+    M->>S: writes the address back
+    Note over S: marked not searchable,<br/>so no lookup fires
+    end
+```
+
+Both halves write to the same `selected` state, which is why either can drive
+the other. Text the app writes back is flagged as not searchable — otherwise
+filling the field after a map click would fire an autocomplete for an address
+that was just resolved.
+
 ## Technical decisions
 
 ### PostgreSQL with PostGIS
@@ -102,6 +168,22 @@ sync. A GiST index on a `GEOGRAPHY(POINT, 4326)` column lets the `<->` operator
 walk the tree in distance order and stop at `LIMIT`, and `GEOGRAPHY` over
 `GEOMETRY` gives metre-accurate distances on a spheroid with no projection
 maths in application code.
+
+```sql
+CREATE TABLE locations (
+  id         BIGSERIAL PRIMARY KEY,
+  zip        TEXT NOT NULL UNIQUE,
+  city       TEXT NOT NULL,
+  state_code CHAR(2) NOT NULL,
+  state_name TEXT NOT NULL,
+  location   GEOGRAPHY(POINT, 4326) NOT NULL,
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+CREATE INDEX locations_location_idx     ON locations USING GIST (location);
+CREATE INDEX locations_city_prefix_idx  ON locations (lower(city) text_pattern_ops);
+CREATE INDEX locations_zip_prefix_idx   ON locations (zip text_pattern_ops);
+```
 
 The prefix indexes use `text_pattern_ops`. Without that opclass the default
 btree will not serve a `LIKE 'bos%'` query in a non-C locale, and the planner
