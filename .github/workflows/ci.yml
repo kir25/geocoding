@@ -123,5 +123,5 @@ jobs:
       # Boots the same app factory main.ts uses and drives it through Fastify's
       # inject, so the global prefix and validation pipe under test are the ones
       # that ship. Runs against the fixture loaded above.
-      - name: API end-to-end tests
-        run: npm run test:e2e -w geocoding-server
+      - name: API integration tests
+        run: npm run test:integration -w geocoding-server

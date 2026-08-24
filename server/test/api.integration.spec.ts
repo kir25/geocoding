@@ -4,11 +4,14 @@ import { createApp } from '../src/app.factory';
 import { loadEnv } from '../scripts/env';
 
 /**
- * End-to-end tests against a real Postgres.
+ * Integration tests: controller, service, repository and a real Postgres,
+ * exercised together in one process.
  *
  * Boots the same app factory main.ts uses, so the global prefix and validation
  * pipe under test are the ones that ship. Requests go through Fastify's inject
- * rather than a socket — no port to allocate, no race on startup.
+ * rather than a socket — no port to allocate, no race on startup. Not
+ * end-to-end: there is no browser and no network hop. Browser-level coverage
+ * arrives with the UI, driven by Playwright.
  *
  * Expects the committed sample fixture to be loaded:
  *   npm run db:migrate && npm run db:ingest -- --sample

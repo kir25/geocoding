@@ -11,7 +11,7 @@
     "test": "vitest run --config vitest.config.ts",
     "db:verify": "tsx scripts/verify.ts",
     "typecheck": "tsc -p tsconfig.json --noEmit && tsc -p tsconfig.scripts.json --noEmit",
-    "test:e2e": "vitest run --config vitest.e2e.config.ts"
+    "test:integration": "vitest run --config vitest.integration.config.ts"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.0",
