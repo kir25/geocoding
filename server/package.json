@@ -8,13 +8,16 @@
     "start": "node dist/main.js",
     "db:migrate": "tsx scripts/migrate.ts",
     "db:ingest": "tsx scripts/ingest.ts",
-    "test": "vitest run"
+    "test": "vitest run",
+    "db:verify": "tsx scripts/verify.ts",
+    "typecheck": "tsc -p tsconfig.json --noEmit && tsc -p tsconfig.scripts.json --noEmit"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.0",
     "@nestjs/config": "^4.0.0",
     "@nestjs/core": "^11.0.0",
     "@nestjs/platform-fastify": "^11.0.0",
+    "adm-zip": "^0.6.0",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
     "pg": "^8.13.1",
@@ -24,6 +27,7 @@
   "devDependencies": {
     "@nestjs/cli": "^11.0.0",
     "@nestjs/schematics": "^11.0.0",
+    "@types/adm-zip": "^0.5.8",
     "@types/node": "^22.10.0",
     "@types/pg": "^8.11.10",
     "tsx": "^4.19.2",

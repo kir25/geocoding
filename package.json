@@ -2,8 +2,11 @@
   "name": "geocoding",
   "version": "1.0.0",
   "private": true,
-  "description": "US ZIP code geocoding service — forward lookup, autocomplete and reverse geocoding",
-  "workspaces": ["server", "web"],
+  "description": "US ZIP code geocoding service \u2014 forward lookup, autocomplete and reverse geocoding",
+  "workspaces": [
+    "server",
+    "web"
+  ],
   "scripts": {
     "dev": "concurrently -n server,web -c cyan,magenta \"npm:dev:server\" \"npm:dev:web\"",
     "dev:server": "npm run dev -w geocoding-server",
@@ -12,7 +15,8 @@
     "db:migrate": "npm run db:migrate -w geocoding-server",
     "db:ingest": "npm run db:ingest -w geocoding-server",
     "db:reset": "npm run db:migrate && npm run db:ingest",
-    "test": "npm run test -w geocoding-server"
+    "test": "npm run test -w geocoding-server",
+    "db:verify": "npm run db:verify -w geocoding-server"
   },
   "devDependencies": {
     "concurrently": "^9.1.2"
