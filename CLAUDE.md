@@ -33,7 +33,7 @@ the planner falls back to a sequential scan. `db:verify` asserts this.
 
 **`ST_MakePoint` takes longitude first.** The HTTP contract is `lat` then
 `lng`. Transposition reads naturally in review, so it is covered explicitly in
-`client.integration.test.ts` and `geocoding.service.spec.ts`.
+`web/test/integration/client.test.ts` and `geocoding.service.spec.ts`.
 
 **Reverse geocoding is bounded at 100 km.** Nearest-centroid always returns
 something; the bound is what makes a click in open ocean report `ZERO_RESULTS`.
@@ -43,13 +43,17 @@ endpoint does not exist.
 
 ## Which test layer
 
-| Change | Layer | File |
-| ------ | ----- | ---- |
-| Parsing, validation, query classification | server unit | `*.spec.ts` beside the source |
-| SQL, or anything about a query plan | API integration | `server/test/` |
-| Component behaviour — debounce, keyboard | web component | `*.test.tsx` |
-| How a request is built or a response read | UI integration | `*.integration.test.ts(x)` |
-| Anything needing a real browser | e2e | `web/e2e/` |
+Tests that need nothing sit beside the code they cover. Tests that need an
+environment — a database, a faked network, a browser — live under `test/` with
+the config that provides it.
+
+| Change | Layer | Where |
+| ------ | ----- | ----- |
+| Parsing, validation, query classification | server unit | `server/**/*.spec.ts`, beside the source |
+| Component behaviour — debounce, keyboard | web component | `web/src/**/*.test.tsx`, beside the component |
+| SQL, or anything about a query plan | API integration | `server/test/integration/` |
+| How a request is built or a response read | UI integration | `web/test/integration/` |
+| Anything needing a real browser | e2e | `web/test/e2e/` |
 
 Prove a new test can fail. Mutate the behaviour it covers, watch it go red,
 restore. A test that passes either way is worse than no test — it reads as

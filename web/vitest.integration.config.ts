@@ -24,7 +24,7 @@ export default defineConfig({
     // rejects relative URLs outright — so the base is made absolute here rather
     // than changing the app to suit the test environment.
     env: { VITE_API_BASE: 'http://localhost:3000/api/v1' },
-    setupFiles: ['./src/test/setup-integration.ts'],
-    include: ['src/**/*.integration.test.ts', 'src/**/*.integration.test.tsx'],
+    setupFiles: ['./test/support/setup-integration.ts'],
+    include: ['test/integration/**/*.test.ts', 'test/integration/**/*.test.tsx'],
   },
 });

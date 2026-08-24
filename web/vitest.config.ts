@@ -6,9 +6,9 @@ export default defineConfig({
   test: {
     environment: 'jsdom',
     globals: true,
-    setupFiles: ['./src/test/setup.ts'],
-    include: ['src/**/*.test.tsx', 'src/**/*.test.ts'],
-    // The integration suite has its own setup (MSW) and its own config.
-    exclude: ['src/**/*.integration.test.ts', 'src/**/*.integration.test.tsx'],
+    setupFiles: ['./test/support/setup.ts'],
+    // Component tests sit beside the component they cover. Everything that
+    // needs its own environment lives under test/ with its own config.
+    include: ['src/**/*.test.ts', 'src/**/*.test.tsx'],
   },
 });
