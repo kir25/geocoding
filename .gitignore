@@ -9,3 +9,6 @@ coverage/
 # downloaded dataset — fetched by `npm run db:ingest`
 data/*
 !data/sample.txt
+
+# TypeScript incremental build state
+*.tsbuildinfo
