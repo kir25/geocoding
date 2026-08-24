@@ -1,8 +1,8 @@
 import { http, HttpResponse } from 'msw';
 import { describe, expect, it } from 'vitest';
-import { autocomplete, geocodePlaceId, reverseGeocode } from './client';
-import { lastRequest } from '../test/handlers';
-import { server } from '../test/msw';
+import { autocomplete, geocodePlaceId, reverseGeocode } from '../../src/api/client';
+import { lastRequest } from '../support/handlers';
+import { server } from '../support/msw';
 
 /**
  * The client's own contract with the API, exercised over real fetch with MSW

@@ -312,14 +312,22 @@ geocoding/
 ├── data/sample.txt            12-row fixture — 9 places plus 3 APO/FPO rows
 ├── server/
 │   ├── migrations/            forward-only SQL, tracked in schema_migrations
-│   ├── scripts/               migrate, ingest, verify
-│   └── src/geocoding/         controller → service → repository
+│   ├── scripts/               migrate, ingest, verify (+ colocated unit tests)
+│   ├── src/geocoding/         controller → service → repository
+│   └── test/integration/      the app against a real Postgres
 └── web/
-    ├── e2e/                   Playwright
-    └── src/
-        ├── api/               client and response types
-        └── components/        SearchBox, MapView
+    ├── src/
+    │   ├── api/               client and response types
+    │   └── components/        SearchBox, MapView (+ colocated component tests)
+    └── test/
+        ├── e2e/               Playwright, against the running stack
+        ├── integration/       real client, network faked with MSW
+        └── support/           MSW handlers and suite setup
 ```
+
+Unit and component tests sit beside the code they cover, so a change and its
+test move together. Anything needing its own environment — a database, a faked
+network, a browser — lives under `test/` with the config that provides it.
 
 Delivered across three pull requests — data layer, API, UI — each with its own
 description and a green pipeline.

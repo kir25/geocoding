@@ -1,9 +1,9 @@
 {
-  "$comment": "Scripts run through tsx and are never compiled to dist; this file exists so `npm run typecheck` still covers them.",
+  "$comment": "Scripts and tests run through tsx/vitest and are never compiled to dist; this file exists so `npm run typecheck` still covers them.",
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "rootDir": "./",
     "noEmit": true
   },
-  "include": ["scripts/**/*"]
+  "include": ["scripts/**/*", "test/**/*"]
 }

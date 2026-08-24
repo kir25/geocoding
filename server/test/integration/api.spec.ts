@@ -1,7 +1,7 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import type { NestFastifyApplication } from '@nestjs/platform-fastify';
-import { createApp } from '../src/app.factory';
-import { loadEnv } from '../scripts/env';
+import { createApp } from '../../src/app.factory';
+import { loadEnv } from '../../scripts/env';
 
 /**
  * Integration tests: controller, service, repository and a real Postgres,
