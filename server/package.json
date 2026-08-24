@@ -9,7 +9,8 @@
     "db:migrate": "tsx scripts/migrate.ts",
     "db:ingest": "tsx scripts/ingest.ts",
     "test": "vitest run",
-    "db:verify": "tsx scripts/verify.ts"
+    "db:verify": "tsx scripts/verify.ts",
+    "typecheck": "tsc -p tsconfig.json --noEmit && tsc -p tsconfig.scripts.json --noEmit"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.0",

@@ -15,56 +15,12 @@ import { join } from 'node:path';
 import AdmZip from 'adm-zip';
 import { Pool, type PoolClient } from 'pg';
 import { loadEnv, waitForDatabase } from './env';
+import { parseLine, type Row, type SkipReason } from './parse-row';
 
 const DATA_DIR = join(__dirname, '..', '..', 'data');
 const DATA_FILE = join(DATA_DIR, 'US.txt');
 const SAMPLE_FILE = join(DATA_DIR, 'sample.txt');
 const BATCH_SIZE = 1_000;
-
-/** Tab-separated column positions in the GeoNames postal-code export. */
-const COL = {
-  postalCode: 1,
-  placeName: 2,
-  adminName1: 3,
-  adminCode1: 4,
-  latitude: 9,
-  longitude: 10,
-} as const;
-
-interface Row {
-  zip: string;
-  city: string;
-  stateCode: string;
-  stateName: string;
-  lat: number;
-  lng: number;
-}
-
-type SkipReason = 'malformed' | 'no_state_code' | 'bad_coordinates';
-
-/**
- * Returns a skip reason rather than null so the run summary can explain losses.
- * ~511 US rows are APO/FPO military mail codes with no state code: they are
- * routing identifiers, not places, so they are excluded deliberately.
- */
-function parseLine(line: string): Row | SkipReason {
-  const cols = line.split('\t');
-  if (cols.length < 11) return 'malformed';
-
-  const zip = cols[COL.postalCode]?.trim();
-  const city = cols[COL.placeName]?.trim();
-  const stateCode = cols[COL.adminCode1]?.trim();
-  const stateName = cols[COL.adminName1]?.trim();
-  const lat = Number(cols[COL.latitude]);
-  const lng = Number(cols[COL.longitude]);
-
-  if (!zip || !city) return 'malformed';
-  if (!stateCode || stateCode.length !== 2) return 'no_state_code';
-  if (!Number.isFinite(lat) || lat < -90 || lat > 90) return 'bad_coordinates';
-  if (!Number.isFinite(lng) || lng < -180 || lng > 180) return 'bad_coordinates';
-
-  return { zip, city, stateCode, stateName: stateName || stateCode, lat, lng };
-}
 
 async function download(url: string): Promise<void> {
   console.log(`  fetching ${url}`);

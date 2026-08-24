@@ -1,0 +1,9 @@
+{
+  "$comment": "Scripts run through tsx and are never compiled to dist; this file exists so `npm run typecheck` still covers them.",
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "rootDir": "./",
+    "noEmit": true
+  },
+  "include": ["scripts/**/*"]
+}
