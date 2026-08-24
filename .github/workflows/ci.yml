@@ -45,6 +45,13 @@ jobs:
       - name: Component tests (web)
         run: npm test -w geocoding-web
 
+      # Real components over the real API client, with the network faked at the
+      # fetch boundary. Needs no database, so it belongs here rather than in the
+      # Postgres job. Covers what the component suite mocks away: URL building,
+      # query encoding, response parsing and the non-2xx path.
+      - name: UI integration tests (web)
+        run: npm run test:integration -w geocoding-web
+
       # The web build runs tsc -b first, so this typechecks the UI as well as
       # producing the bundle.
       - name: Build (server and web)
