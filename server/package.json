@@ -8,9 +8,10 @@
     "start": "node dist/main.js",
     "db:migrate": "tsx scripts/migrate.ts",
     "db:ingest": "tsx scripts/ingest.ts",
-    "test": "vitest run",
+    "test": "vitest run --config vitest.config.ts",
     "db:verify": "tsx scripts/verify.ts",
-    "typecheck": "tsc -p tsconfig.json --noEmit && tsc -p tsconfig.scripts.json --noEmit"
+    "typecheck": "tsc -p tsconfig.json --noEmit && tsc -p tsconfig.scripts.json --noEmit",
+    "test:integration": "vitest run --config vitest.integration.config.ts"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.0",
@@ -27,11 +28,13 @@
   "devDependencies": {
     "@nestjs/cli": "^11.0.0",
     "@nestjs/schematics": "^11.0.0",
+    "@swc/core": "^1.16.1",
     "@types/adm-zip": "^0.5.8",
     "@types/node": "^22.10.0",
     "@types/pg": "^8.11.10",
     "tsx": "^4.19.2",
     "typescript": "^5.7.2",
+    "unplugin-swc": "^1.5.11",
     "vitest": "^3.2.7"
   }
 }

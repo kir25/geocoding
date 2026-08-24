@@ -119,3 +119,9 @@ jobs:
       # and only surfaces as latency in production.
       - name: Verify schema, indexes and query plans
         run: npm run db:verify -w geocoding-server -- --expect-rows 9
+
+      # Boots the same app factory main.ts uses and drives it through Fastify's
+      # inject, so the global prefix and validation pipe under test are the ones
+      # that ship. Runs against the fixture loaded above.
+      - name: API integration tests
+        run: npm run test:integration -w geocoding-server
