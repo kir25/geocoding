@@ -14,7 +14,7 @@ import { createInterface } from 'node:readline';
 import { join } from 'node:path';
 import AdmZip from 'adm-zip';
 import { Pool, type PoolClient } from 'pg';
-import { loadEnv } from './env';
+import { loadEnv, waitForDatabase } from './env';
 
 const DATA_DIR = join(__dirname, '..', '..', 'data');
 const DATA_FILE = join(DATA_DIR, 'US.txt');
@@ -126,6 +126,8 @@ async function main() {
   }
 
   const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+  await waitForDatabase(pool);
+
   const client = await pool.connect();
 
   let parsed = 0;

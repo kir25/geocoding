@@ -8,13 +8,15 @@
 import { readdir, readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { Pool } from 'pg';
-import { loadEnv } from './env';
+import { loadEnv, waitForDatabase } from './env';
 
 const MIGRATIONS_DIR = join(__dirname, '..', 'migrations');
 
 async function main() {
   loadEnv();
   const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+
+  await waitForDatabase(pool);
 
   try {
     await pool.query(`

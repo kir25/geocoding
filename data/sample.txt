@@ -1,1 +1,12 @@
-US	02101	Boston	Massachusetts	MA	Suffolk	025			42.3601	-71.0589	4
+US	99501	Anchorage	Alaska	AK	Anchorage Municipality	020			61.2116	-149.8761	1
+US	90210	Beverly Hills	California	CA	Los Angeles	037			34.0901	-118.4065	4
+US	94102	San Francisco	California	CA	City and County of San Francisco	075			37.7813	-122.4167	4
+US	33101	Miami	Florida	FL	Miami-Dade	086			25.7791	-80.1978	4
+US	60601	Chicago	Illinois	IL	Cook	031			41.8858	-87.6181	4
+US	02108	Boston	Massachusetts	MA	Suffolk	025			42.3576	-71.0684	4
+US	02130	Jamaica Plain	Massachusetts	MA	Suffolk	025			42.3126	-71.1115	4
+US	89310	Austin	Nevada	NV	Lander	015			39.508	-117.0811	1
+US	10001	New York	New York	NY	New York	061			40.7484	-73.9967	4
+US	09001	APO AA							38.1105	15.6613	
+US	09007	APO AE							49.4077	8.6908	
+US	09008	APO AE							50.1155	8.6842	

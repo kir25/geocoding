@@ -8,7 +8,8 @@
     "start": "node dist/main.js",
     "db:migrate": "tsx scripts/migrate.ts",
     "db:ingest": "tsx scripts/ingest.ts",
-    "test": "vitest run"
+    "test": "vitest run",
+    "db:verify": "tsx scripts/verify.ts"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.0",
