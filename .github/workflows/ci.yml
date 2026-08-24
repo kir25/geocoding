@@ -39,8 +39,11 @@ jobs:
       - name: Typecheck (server)
         run: npm run typecheck -w geocoding-server
 
-      - name: Unit tests
+      - name: Unit tests (server)
         run: npm test -w geocoding-server
+
+      - name: Component tests (web)
+        run: npm test -w geocoding-web
 
       # The web build runs tsc -b first, so this typechecks the UI as well as
       # producing the bundle.

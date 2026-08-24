@@ -15,7 +15,7 @@
     "db:migrate": "npm run db:migrate -w geocoding-server",
     "db:ingest": "npm run db:ingest -w geocoding-server",
     "db:reset": "npm run db:migrate && npm run db:ingest",
-    "test": "npm run test -w geocoding-server",
+    "test": "npm test -w geocoding-server && npm test -w geocoding-web",
     "db:verify": "npm run db:verify -w geocoding-server",
     "test:integration": "npm run test:integration -w geocoding-server"
   },

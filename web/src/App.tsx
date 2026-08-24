@@ -79,10 +79,15 @@ export default function App() {
         <MapView selected={selected} onMapClick={handleMapClick} />
       </main>
 
-      <footer className="app__footer" role="status" aria-live="polite">
-        {status ?? (selected
-          ? `${selected.formatted_address} · ${selected.geometry.location.lat.toFixed(4)}, ${selected.geometry.location.lng.toFixed(4)}`
-          : 'Search for a place, or click anywhere on the map')}
+      <footer className="app__footer">
+        {/* The live region is nested rather than applied to the footer itself:
+            role="status" would override the implicit contentinfo landmark. */}
+        <span role="status" aria-live="polite">
+          {status ??
+            (selected
+              ? `${selected.formatted_address} · ${selected.geometry.location.lat.toFixed(4)}, ${selected.geometry.location.lng.toFixed(4)}`
+              : 'Search for a place, or click anywhere on the map')}
+        </span>
       </footer>
     </div>
   );
