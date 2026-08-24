@@ -5,8 +5,9 @@
  * than buffered, and the write is an upsert keyed on `zip`. Running it twice
  * produces the same table, so the same script works as a nightly refresh.
  *
- *   npm run db:ingest              # download (or reuse ./data/US.txt)
- *   npm run db:ingest -- --sample  # use the committed fixture, no network
+ *   npm run db:ingest                # download (or reuse ./data/US.txt)
+ *   npm run db:ingest -- --sample    # use the committed fixture, no network
+ *   npm run db:ingest -- --truncate  # replace the table rather than merge into it
  */
 import { createReadStream, existsSync } from 'node:fs';
 import { mkdir, writeFile } from 'node:fs/promises';
@@ -70,6 +71,7 @@ async function flush(client: PoolClient, rows: Row[]): Promise<void> {
 async function main() {
   loadEnv();
   const useSample = process.argv.includes('--sample');
+  const truncate = process.argv.includes('--truncate');
   const started = Date.now();
 
   const source = useSample ? SAMPLE_FILE : DATA_FILE;
@@ -85,6 +87,17 @@ async function main() {
   await waitForDatabase(pool);
 
   const client = await pool.connect();
+
+  // Opt-in, never implied by --sample. The ingest is an upsert, so loading the
+  // fixture over a full import leaves the two merged and row counts that look
+  // wrong for either. Destructive, so it has to be asked for explicitly.
+  if (truncate) {
+    const { rows } = await client.query<{ count: string }>(
+      'SELECT count(*)::text AS count FROM locations',
+    );
+    await client.query('TRUNCATE locations RESTART IDENTITY');
+    console.log(`  truncated ${Number(rows[0].count).toLocaleString()} existing rows`);
+  }
 
   let parsed = 0;
   let upserted = 0;
